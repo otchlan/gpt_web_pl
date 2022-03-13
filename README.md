@@ -7,3 +7,7 @@ Prosta strona ktora:
   - przesyla TLUMACZENIE go do API openai
   - otrzymana ODPOWIEDZ z openai wysyla do API deepl(PL)
   - wyswietla to na stronie internetowej
+
+Rozruch aplikacji
+_$ export FLASK_ENV=development
+$ flask run_
