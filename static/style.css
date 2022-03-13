@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 html, body, div, span{
     margin:0;
     padding:0;
@@ -10,4 +14,27 @@ html, body, div, span{
 
 body{
     background-color:#F4F4F4;
+    overflow-X: hidden;
 }
+
+.wrapper{
+    width: 100vw;
+    height: auto;
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    gap: 20px;
+    padding: 40px;
+}
+
+.left{
+   display: flex;
+   gap: 20px;
+}
+
+.input-group{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+

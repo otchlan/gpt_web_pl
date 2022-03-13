@@ -50,10 +50,10 @@ def index(text=ppt):
         temperature=0.7,
             # The temperature controls how much randomness is in the output
             # https://algowriting.medium.com/gpt-3-temperature-setting-101-41200ff0d0be
-        max_tokens=10
+        max_tokens=10,
         top_p=1,
         frequency_penalty=0,
-        presecne_penalty=0.3
+        # presecne_penalty=0.3
     )
     return render_template('index.html', content=res)
 """
