@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, flash, redirect, url_for
 import deepl, os, openai
 from dotenv import load_dotenv
 
@@ -23,7 +23,14 @@ ppt = " inaczej"
 async def input_text(text: str = Form(...)):
     return {"text": text}
 """
-
+messages = [
+    {'input': 'Message one',
+     'content': 'Messaage one content'},
+    {'temp': 'Message two',
+     'content': 'Messaage two content'},
+{'engine': 'Message three',
+     'content': 'Messaage three content'}
+]
 
 @app.route("/test")
 def deepl_in(text=ppt):
@@ -37,8 +44,24 @@ def deepl_in(text=ppt):
     return render_template('index.html', content=result_deepl)
 
 
-@app.route("/")
+@app.route("/", methods=('GET', 'POST'))
 def index(text=ppt):
+
+    if request.method == 'POST':
+        input = request.form['input']
+        temp = request.form['temp']
+        engine = request.form['engine']
+
+        if not input:
+            flash('Input is required')
+        elif not temp:
+            flash('Temp is required')
+        elif not engine:
+            flash('Engine is required')
+        else:
+            messages.append({'input': input, 'temp': temp, 'engine': engine})
+            return redirect(url_for('index'))
+
     translator = deepl.Translator(DEEPL_API_KEY)
     result_deepl = translator.translate_text(text, source_lang='PL', target_lang='EN-US')
     result_deepl = result_deepl.text

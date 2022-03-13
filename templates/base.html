@@ -13,30 +13,36 @@
 
 {% endblock %}
 <div class="wrapper">
-    <div class="left">
-        <div class="input-group">
-            <label>Input</label>
-            <textarea rows="7" type="text" placeholder="Enter some text" name="input"></textarea>
+    <form method="post">
+        <div class="left">
+            <div class="input-group">
+                <label>Input</label>
+                <textarea rows="7" type="text" placeholder="Enter some text" name="input"
+                          value="{{request.form['input']}}"></textarea>
+            </div>
+            <div class="input-group">
+                <label>Output</label>
+                <textarea rows="7" type="text" placeholder="Enter some text" name="output"></textarea>
+            </div>
         </div>
-         <div class="input-group">
-            <label>Output</label>
-            <textarea rows="7" type="text" placeholder="Enter some text" name="output"></textarea>
+        <div class="right">
+            <div class="input-group">
+                <label>Temp</label>
+                <input type="number" placeholder="Temp" min="0" max="1" name="temp" value="{{request.form['temp']}}"/>
+            </div>
+            <div class="input-group">
+                <label>Select engine</label>
+                <select name="engine" value="{{request.form['engine']}}">
+                    <option value="1">engine1</option>
+                    <option value="2">engine2</option>
+                    <option value="3">engine3</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <button type="submit">Send</button>
+            </div>
         </div>
-    </div>
-    <div class="right">
-        <div class="input-group">
-            <label>Temp</label>
-            <input type="number" placeholder="Temp" min="0" max="1" name="conf"/>
-        </div>
-        <div class="input-group">
-            <label>Select engine</label>
-            <select>
-                <option>engine1</option>
-                <option>engine2</option>
-                <option>engine3</option>
-            </select>
-        </div>
-    </div>
+    </form>
 </div>
 </body>
 </html>
