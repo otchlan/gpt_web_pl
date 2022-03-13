@@ -61,6 +61,7 @@ def index(text=ppt):
         else:
             messages.append({'input': input, 'temp': temp, 'engine': engine})
             return redirect(url_for('index'))
+        return render_template('base.html')
 
     translator = deepl.Translator(DEEPL_API_KEY)
     result_deepl = translator.translate_text(text, source_lang='PL', target_lang='EN-US')
