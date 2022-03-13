@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block head %} {% endblock %}
+
+{% block body %}
+
+<form method="post">
+    <label for="title">Title</label>
+    <br>
+    <input type="text" name="title"
+           placeholder="Message title"
+           value="{{ request.form['title'] }}"/>
+    <br>
+
+    <label for="content_
+    _html">Message content</label>
+    <br>
+    <textarea name="content"
+              placeholder="Message content"
+              rows="15"
+              cols="60"
+              >{{ request.form['content'] }}</textarea>
+    <br>
+     <label for="cos">cos</label>
+    <br>
+    <input type="text" name="cos"
+           placeholder="Message cos"
+           value="{{ request.form['cos'] }}"/>
+    <br>
+    <button type="submit">Submit</button>
+
+</form>
+
+
+{% endblock %}
