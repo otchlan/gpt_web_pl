@@ -8,6 +8,10 @@ Prosta strona ktora:
   - otrzymana ODPOWIEDZ z openai wysyla do API deepl(PL)
   - wyswietla to na stronie internetowej
 
+
+
 Rozruch aplikacji
-_$ export FLASK_ENV=development
-$ flask run_
+
+_$ export FLASK_ENV=development_
+
+_$ flask run_
