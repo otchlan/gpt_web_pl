@@ -90,6 +90,7 @@ def interacting_model_gpt(engine='text-davinci-001', temperature=0.7, result_dee
     print(type(prompt))
     return prompt
 
+# todo TO TERAZ ZROBIC
 """
 @app.route('/clean')
 def gpt_prompt_cleaning(prompt=interacting_model_gpt):
