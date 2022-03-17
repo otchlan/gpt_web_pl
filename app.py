@@ -51,17 +51,11 @@ def cr():
 
 
 # temp_ppt = " mam na imie Technologia"
-temp_ppt = " infinity"
+temp_ppt = "infinity"
 
 
-@app.route("/dl")  # testy
-# TODO co zrobic zeby dzialal source_lang='EN_US' bo wywala blad, a na 'PL' dziala
-# def deepl_in(text=temp_ppt, source_lang='EN_US', target_lang='PL'):
-def deepl_in(text=temp_ppt, source_lang='PL', target_lang='PL'):
-    print(' - deepl_in')
-    return render_template('index.html', content=interacting_deepl(text, source_lang, target_lang))
-
-
+"""  !!!DO DOKUMENTACJI!!! wazne nie dziala jako source_lang EN-US trzeba dawac samo EN, ale jako target language EN_US dziala"""
+# def interacting_deepl(text=temp_ppt, source_lang='EN', target_lang='PL'):
 def interacting_deepl(text=temp_ppt, source_lang='PL', target_lang='EN-US'):
     print(' - integrating_deepl')
     translator = deepl.Translator(DEEPL_API_KEY)
@@ -71,41 +65,65 @@ def interacting_deepl(text=temp_ppt, source_lang='PL', target_lang='EN-US'):
     return result_deepl.text
 
 
-def interacting_model_gpt(engine='text-davinci-001', temperature=0.7, result_deepl=interacting_deepl()):
-    print('interacting_model_gpt')
+@app.route('/clean')
+# def interacting_model_gpt(engine='text-davinci-001', temperature=0.7, result_deepl=interacting_deepl):
+def interacting_model_gpt(engine='text-davinci-001', temperature=0.7, result_deepl=temp_ppt):
+    print(' - interacting_model_gpt')
     prompt = openai.Completion.create(
         engine=engine,
         prompt=result_deepl,  # dane podawane do API OPENAI
         temperature=0.7,
         # The temperature controls how much randomness is in the output
         # https://algowriting.medium.com/gpt-3-temperature-setting-101-41200ff0d0be
-        max_tokens=1,
+        max_tokens=4,
         top_p=1,
         frequency_penalty=0,
-        user='w dokumentacji - Provide user identifier',
-        stop="", # TODO powiedziec uzytkownikowi ze po nacisnieciu klawisza zapewne enter tworzy nowy blok wprowadzania
+        # user='w dokumentacji - Provide user identifier',
+        # stop="", # TODO powiedziec uzytkownikowi ze po nacisnieciu klawisza zapewne enter tworzy nowy blok wprowadzania
         # TODO sprawdzic jakie sa zmiany gdy user identifier jest, a jak go nie ma - mozna ustawic jakas sztywna temperature, albo kazac ulozyc historie lub vos bardziej logicznego np opisac cos/logicznego
         presence_penalty=0.3
     )
-    print(type(prompt))
+
+    prompt = gpt_prompt_cleaning(prompt)
+    return render_template('index.html', content=prompt)
+
+
+# @app.route('/clean')
+def gpt_prompt_cleaning(prompt=interacting_model_gpt):
+    prompt = repr(prompt)
+    prompt = prompt.split('JSON:')
+    prompt = str(prompt[1])
+    prompt = prompt[1:]
+    prompt = prompt[:-1] + '}'
+    prompt = prompt.replace('null', 'None')
+    prompt = eval(prompt)
+    prompt = json.loads(json.dumps(prompt))
+    prompt = prompt['choices']
+    prompt = str(prompt)
+    prompt = prompt.split("'text': '")
+    prompt = prompt[1]
+    prompt = prompt.replace("'}]", '')
     return prompt
 
-# todo TO TERAZ ZROBIC
-"""
-@app.route('/clean')
-def gpt_prompt_cleaning(prompt=interacting_model_gpt):
-    print(' - gpt_prompt_cleaning')
-    temp_prompt = prompt
-    data = json.loads(temp_prompt)S
-    return data
-"""
+""" Test dzialania Exceptions """
+def test_error():
+    try:
+        t = 4 + "g"
+    except Exception as e:
+        print("testowy error ", e)
+    #return render_template(render_template('test_exception.html'))
+    finally:
+        print('blad obslugi')
 
 @app.route("/index")
 def index():
     print(' - index')
     # return gpt_prompt_cleaning()
-    return interacting_model_gpt()
-    #return render_template('index.html', content=res)
+    # return interacting_model_gpt()
+    res = []
+    # res = test_error()
+    # return render_template('index.html', content=res)
+    return render_template('index.html', content=res)
 
 # TODO zobacz to na temat tego answers
 
