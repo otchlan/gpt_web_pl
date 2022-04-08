@@ -3,17 +3,19 @@
 {% block head %} {% endblock %}
 
 {% block body %}
-
+<!-- OBSŁUGA WIADOMOŚCI FLASH -->
+<!--    {% with messages = get_flashed_messages() %}-->
+<!--        {% if messages %}-->
+<!--            {% for msg in messages %}-->
+<!--              <p>{{ msg }}</p>-->
+<!--            {% endfor %}-->
+<!--        {% endif %}-->
+<!--    {% endwith %}-->
 <form method="post">
-    <label for="title">Title</label>
-    <br>
-    <input type="text" name="title"
-           placeholder="Message title"
-           value="{{ request.form['title'] }}"/>
-    <br>
+    <label for="title">TU BĘDĄ JAKIEŚ SUGESTYWNE SŁOWA ZDANIA - test jak możemy kierować ludzmi</label>
+    <br><br>
 
-    <label for="content_
-    _html">Message content</label>
+    <label for="content">Twoje pytenie do SI</label>
     <br>
     <textarea name="content"
               placeholder="Message content"
@@ -21,14 +23,7 @@
               cols="60"
               >{{ request.form['content'] }}</textarea>
     <br>
-     <label for="cos">cos</label>
-    <br>
-    <input type="text" name="cos"
-           placeholder="Message cos"
-           value="{{ request.form['cos'] }}"/>
-    <br>
     <button type="submit">Submit</button>
-
 </form>
 
 

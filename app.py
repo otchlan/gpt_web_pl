@@ -28,6 +28,7 @@ messages = [
     {'title': 'Message two',
      'content': 'Messaage two content'}
 ]
+
 """ WPROWADZANIE ZE STRONY """
 """ https://www.digitalocean.com/community/tutorials/how-to-use-web-forms-in-a-flask-application """
 @app.route('/cr/', methods=('GET', 'POST'))
@@ -36,46 +37,44 @@ def cr():
     # todo zobaczyc jak podpisac otrzymane dane pod jakies zmienne zeby potem moglybyc przetwarzane dalej
     print(" - dane do back(cr)")
     if request.method == 'POST':
-        title = request.form['title']
         content = request.form['content']
-        cos = request.form['cos']
 
-        if not title:
-            flash('Title is required')
-        elif not content:
-            flash('Contetnt is required')
+        if not content:
+            flash('Contetnt is required', 'info')
         else:
-            messages.append({'title': title, 'content': content})
-            return redirect(url_for('index'))
+            pass
+            #todo wysłanie zapytania do GPT
+            # return redirect(url_for('index'), Response=int_glob)
     return render_template('dane_do_back.html')
 
 
 # temp_ppt = " mam na imie Technologia"
-temp_ppt = "infinity"
-
+temp_ppt = "Możesz podać mi listę dostępnych zdecentralizowanych giełd proszę?"
 
 """  !!!DO DOKUMENTACJI!!! wazne nie dziala jako source_lang EN-US trzeba dawac samo EN, ale jako target language EN_US dziala"""
 # def interacting_deepl(text=temp_ppt, source_lang='EN', target_lang='PL'):
+# @app.route('/dis')
 def interacting_deepl(text=temp_ppt, source_lang='PL', target_lang='EN-US'):
     print(' - integrating_deepl')
     translator = deepl.Translator(DEEPL_API_KEY)
     # print('source -- ', source_lang)
     # print('target -- ', target_lang)
     result_deepl = translator.translate_text(text, source_lang=source_lang, target_lang=target_lang)
-    return result_deepl.text
+    # return result_deepl.text
+    return result_deepl
 
 
-@app.route('/clean')
+# @app.route('/clean')
 # def interacting_model_gpt(engine='text-davinci-001', temperature=0.7, result_deepl=interacting_deepl):
 def interacting_model_gpt(engine='text-davinci-001', temperature=0.7, result_deepl=temp_ppt):
     print(' - interacting_model_gpt')
     prompt = openai.Completion.create(
         engine=engine,
         prompt=result_deepl,  # dane podawane do API OPENAI
-        temperature=0.7,
+        temperature=0.3,
         # The temperature controls how much randomness is in the output
         # https://algowriting.medium.com/gpt-3-temperature-setting-101-41200ff0d0be
-        max_tokens=4,
+        max_tokens=20,
         top_p=1,
         frequency_penalty=0,
         # user='w dokumentacji - Provide user identifier',
@@ -103,6 +102,7 @@ def gpt_prompt_cleaning(prompt=interacting_model_gpt):
     prompt = prompt.split("'text': '")
     prompt = prompt[1]
     prompt = prompt.replace("'}]", '')
+    prompt = prompt[4:]
     return prompt
 
 """ Test dzialania Exceptions """
@@ -118,12 +118,13 @@ def test_error():
 @app.route("/index")
 def index():
     print(' - index')
-    # return gpt_prompt_cleaning()
-    # return interacting_model_gpt()
-    res = []
-    # res = test_error()
-    # return render_template('index.html', content=res)
-    return render_template('index.html', content=res)
+    result = 'Tu jest jakiś tekst po polsku. Jaka jest belgijska tradycyjna potrawa?'
+    result = str(interacting_deepl(result))
+    result = interacting_model_gpt(result_deepl=result)
+    result = interacting_deepl(result, 'EN', 'PL')
+    # result = 'ee'
+    return render_template('index.html', content=result)
+    # return render_template('index.html', content=result)
 
 # TODO zobacz to na temat tego answers
 
@@ -131,3 +132,6 @@ def index():
 # TODO wywietlanie odpowiedzi tylko a nie calego zwrotu
 # TODO no i jakis prompt trzeba zrobic ogarniety do tego zeby marketing ogarnial
 # TODO dodac advenced - z openai
+
+if __name__ == '__main__':
+    app.run(debug=True, use_reloader=False)
