@@ -1,0 +1,15 @@
+services:
+
+ flask:
+   build: ./gpt_web_pl
+   container_name: flask
+   restart: always
+   expose:
+     - 5000
+
+# nginx:
+#   build: ./nginx
+#   container_name: nginx
+#   restart: always
+#   ports:
+#     - 80:80
