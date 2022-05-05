@@ -84,8 +84,8 @@ def interacting_model_gpt(engine='text-davinci-001', temperature=0.7, result_dee
     )
 
     prompt = gpt_prompt_cleaning(prompt)
-    return render_template('index.html', content=prompt)
-
+    # return render_template('index.html', content=prompt)
+    return prompt
 
 # @app.route('/clean')
 def gpt_prompt_cleaning(prompt=interacting_model_gpt):
@@ -115,11 +115,16 @@ def test_error():
     finally:
         print('blad obslugi')
 
-@app.route("/index")
+@app.route("/")
 def index():
     print(' - index')
     result = 'Tu jest jakiś tekst po polsku. Jaka jest belgijska tradycyjna potrawa?'
     result = str(interacting_deepl(result))
+
+    # print("-- -- -- --")
+    # print(result)
+    # print("-- -- -- --")
+
     result = interacting_model_gpt(result_deepl=result)
     result = interacting_deepl(result, 'EN', 'PL')
     # result = 'ee'
