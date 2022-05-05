@@ -1,7 +1,0 @@
-os
-deepl
-python-multipart
-python-dotenv
-openai
-json
-flask
